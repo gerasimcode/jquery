@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Bootstrap Example</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <style>
+        @media (min-width: 576px) {
+            .jumbotron {
+                padding: 1rem 2rem;
+            }
+        }
+    </style>
+</head>
+
+<body> 
+    <div class="container">
+        <div class="jumbotron text-center bg-success text-white">
+            <h1>Dynamic Table Add Row</h1>
+            <p>Add Row to Table and Delete</p>
+        </div>
+        <div class="row">
+            <div class="col-md-2 col-sm-6 col-6 p-2 ">
+                <input type="text" class="form-control" placeholder="Enter Name" id="txtName" />
+            </div>
+            <div class="col-md-2 col-sm-6 col-6 p-2 ">
+                <input type="text" class="form-control " placeholder="Enter City" id="txtCity" />
+            </div>
+            <div class="col-md-2 col-sm-6 col-6 p-2 ">
+                <input type="text" class="form-control " placeholder="Enter Mobile" id="txtMobile" />
+            </div>
+            <div class="col-md-2 col-sm-6 col-12 p-2">
+                <input type="button" id="btnAdd" class="btn btn-primary para" value="Add New" />
+            </div>
+        </div>
+        <div class="row pt-3">
+            <div class="col-md-12 col-sm-12 col-12 p-2 ">
+                <table id="tblData" class="table table-bordered table-hover table-striped">
+                    <thead>
+                        <tr>
+                            <th>Sr No</th>
+                            <th>Name</th>
+                            <th>City</th>
+                            <th>Mobile</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody> 
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <script>
+        var emptyRow = "<tr><td colspan='5' class='text-center'> No Records Available</td></tr>";
+
+        $(document).ready(function () {
+            debugger;
+            $("#tblData tbody").append(emptyRow); // adding empty row on page load
+
+            $("#btnAdd").click(function () { 
+                var name = $("#txtName").val().trim();
+                var city = $("#txtCity").val().trim();
+                var mobile = $("#txtMobile").val().trim();
+
+                if (name != "" && city != "" && mobile != "") { // validation
+                    debugger;
+                    if ($("#tblData tbody").children().children().length == 1) {
+                        $("#tblData tbody").html("");
+                    }
+                    var srNo = $("#tblData tbody").children().length + 1;
+                    // creating dynamic html string
+                    var dynamicTr = "<tr><td>"+srNo+"</td><td>" + name + "</td><td>" + city + "</td><td>" + mobile + "</td><td> <button class='btn btn-danger btn-sm' > delete </button> </td></tr>";
+                    debugger; 
+                    $("#tblData tbody").append(dynamicTr); // appending dynamic string to table tbody
+                    $("#txtName").val("");
+                    $("#txtCity").val("");
+                    $("#txtMobile").val("");
+                    $(".btn-sm").click(function () { // registering function for delete button
+                        debugger;
+                        $(this).parent().parent().remove();
+                        if ($("#tblData tbody").children().children().length == 0) {
+                            $("#tblData tbody").append(emptyRow);
+                        }
+                    });
+                } else {
+                    alert("Please provide values");
+                }
+            });
+
+        });
+    </script>
+
+</body>
+
+</html>
