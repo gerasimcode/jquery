@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Bootstrap Example</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+    <style>
+        .border-cus {
+            border: 1px solid rgb(23, 162, 184) !important;
+        }
+        .errdiv {
+            color: red;
+        }
+        @media only screen and (max-width: 600px) {
+            body {
+                background-color: lightblue;
+            }
+            .header-btn-none {
+                display: none;
+            }
+            .header-label-center {
+                text-align: center;
+            }
+            .col-mb-6 {
+                -ms-flex: 0 0 50%;
+                flex: 0 0 50%;
+                max-width: 50%;
+            }
+            .col-mb-12 {
+                -ms-flex: 0 0 100%;
+                flex: 0 0 100%;
+                max-width: 100%;
+            }
+            .col-mb-8 {
+                -ms-flex: 0 0 60%;
+                flex: 0 0 60%;
+                max-width: 60%;
+            }
+            .col-mb-4 {
+                -ms-flex: 0 0 40%;
+                flex: 0 0 40%;
+                max-width: 40%;
+            }
+        }
+        label {
+            margin-bottom: 0 !important;
+        }
+        .button-100 {
+            width: 100px !important;
+        }
+        .error {
+            border-color: red !important;
+        }
+    </style>
+    <script>
+        $(document).ready(function () {
+            $('#btncancel').click(function () {
+                $(this).closest('form').find("input[type=text], textarea").val("");
+            })
+            $("#btnSave").click(function () {
+                debugger;
+                const elements = document.querySelectorAll('.form-control');
+                Array.from(elements).forEach((element, index) => {
+                    // conditional logic here.. access element
+                    debugger;
+                    if (element.required == true && element.value !== "") {
+                        if (element.minLength !== -1 && element.value.length >= element.minLength) {
+                            if (element.maxLength !== -1 && element.value.length <= element.maxLength) {
+                                clearError(element);
+                            } else {
+                                if (element.maxLength !== -1) {
+                                    showError(element, "Max length error")
+                                } else {
+                                    clearError(element);
+                                }
+                            }
+                        } else {
+                            if (element.minLength !== -1) {
+                                showError(element, "min length error");
+                            } else {
+                                clearError(element);
+                            }
+                        }
+                    } else {
+                        if (element.required == true) {
+                            showError(element, "This is Required")
+                        } else {
+                            clearError(element);
+                        }
+                    }
+                });
+            });
+
+            $('.form-control').on("change paste keyup focus", function (obj) {
+                debugger;
+                if (obj.target.required == true && obj.target.value !== "") {
+                    if (obj.target.minLength !== -1 && obj.target.value.length >= obj.target.minLength) {
+                        if (obj.target.maxLength !== -1 && obj.target.value.length <= obj.target.maxLength) {
+                            clearError($(this));
+                        } else {
+                            if (obj.target.maxLength !== -1) {
+                                showError($(this), "Max length error")
+                            } else {
+                                clearError($(this));
+                            }
+                        }
+                    } else {
+                        if (obj.target.minLength !== -1) {
+                            showError($(this), "min length error");
+                        } else {
+                            clearError($(this));
+                        }
+                    }
+                } else {
+                    if (obj.target.required == true) {
+                        showError($(this), "This is Required")
+                    } else {
+                        clearError($(this));
+                    }
+                }
+            });
+        });
+
+        var errDiv = "<div id='divName' class='errdiv' style='color: red;display: none;'></div>";
+        function clearError(element) {
+            $(element).next().remove();
+            $(element).next().hide();
+            $(element).removeClass("error");
+            $(element).next().html("");
+        }
+        function showError(element, error) {
+            var len = $(element).siblings('.errdiv').length;
+            if (len === 0) {
+                $(errDiv).insertAfter(element);
+            }
+            $(element).next().show();
+            $(element).addClass("error");
+            $(element).next().html(error);
+        }
+    </script>
+</head>
+
+
+
+<body>
+    <div class="container pt-2">
+        <div class="card border-cus">
+            <div class="card-header bg-info text-white">
+                <div class="row">
+                    <div class="col-md-4 col-sm-4 col-12 header-label-center font-weight-bold">
+                        Customer Form
+                    </div>
+                    <div class="col-md-8 col-sm-8 col-8 header-btn-none text-right pull-right">
+                        <button type="submit" class="btn btn-outline-success button-100"
+                            onclick="getResolution()">Save</button>
+                        <button type="button" id="btncancel" class="btn btn-outline-dark button-100">Cancel</button>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <form>
+                    <div class="form-row">
+                        <div class="col-md-5">
+                            <label>Name <span class="errdiv"> *</span></label>
+                            <input id="txtName" type="text" class="form-control txt" placeholder="Name" required>
+                        </div>
+                        <div class="col-md-4 col-sm-6 col-6">
+                            <label>Contact No <span class="errdiv"> *</span></label>
+                            <input id="txtContact" data-type="number" type="number" minlength="10" maxlength="10"
+                                class="form-control txt" placeholder="Contact No" required>
+                        </div>
+                        <div class="col-md-3 col-sm-6 col-6">
+                            <label>Alt Contact No</label>
+                            <input type="number" class="form-control txt" minlength="10" maxlength="10"
+                                placeholder="Alt Contact No">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col-md-6 col-sm-7">
+                            <label>Address <span class="errdiv"> *</span></label>
+                            <textarea class="form-control txt" rows="3" minlength="15" placeholder="1234 Main St"
+                                required></textarea>
+                        </div>
+                        <div class="col-md-4 col-sm-5">
+                            <label>Select Area <span class="errdiv"> *</span></label>
+                            <select class="form-control txt" required>
+                                <option value="">Choose...</option>
+                                <option>...</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col-md-4 col-sm-6 col-6">
+                            <label>Occupation</label>
+                            <input type="text" class="form-control txt" placeholder="Occupation">
+                        </div>
+                        <div class="col-md-4 col-sm-6 col-6">
+                            <label>Office Contact No</label>
+                            <input type="text" class="form-control " placeholder="Contact No">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col-md-6 text-center">
+                            <label>Reference Details</label>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col-md-4 col-sm-6 col-6">
+                            <label>1) Name <span class="errdiv"> *</span></label>
+                            <input type="text" class="form-control" placeholder="Contact Name 1" required>
+                        </div>
+                        <div class="col-md-4 col-sm-6 col-6">
+                            <label> Contact No</label>
+                            <input type="number" class="form-control" minlength="10" maxlength="10"
+                                placeholder="Contact No 1">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col-md-4 col-sm-6 col-6">
+                            <label>2) Name <span class="errdiv"> *</span></label>
+                            <input type="text" class="form-control" placeholder="Contact Name 2" required>
+                        </div>
+                        <div class="col-md-4 col-sm-6 col-6">
+                            <label> Contact No</label>
+                            <input type="number" class="form-control" minlength="10" maxlength="10"
+                                placeholder="Contact No 2">
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="card-footer bg-info text-white">
+                <div class="row">
+                    <div class="col-md-6 col-sm-6 col-6">
+                        <button type="button" id="btnSave" class="btn btn-outline-warning button-100">Save</button>
+                    </div>
+                    <div class="col-md-6 col-sm-6 col-6 text-right">
+                        <button type="submit" class="btn btn-outline-dark button-100">Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
