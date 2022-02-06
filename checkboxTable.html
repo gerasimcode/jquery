@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-  <title>Bootstrap Example</title>
+  <title>Table Checkbox</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
@@ -21,18 +21,29 @@
     .tdSr {
       width: 7%;
     }
+
+    strong {
+      font-size: 19px;
+    }
+
+    input.largerCheckbox {
+      width: 20px;
+      height: 20px;
+    }
   </style>
 </head>
 
 <body>
   <div class="container">
     <div class="jumbotron text-center bg-success text-white">
-      <h2>Crud Operation Jquery-Ajax with jsonplaceholder Fake API</h2>
-      <p>Fetching GET,POST,PUT & DELETE API</p>
+      <h2>Checkbox Selection in table using jQuery</h2>
+      <h4> Select All / De-Select All - Get Checked records ids</h4>
     </div>
     <div class="row">
-      <div class="col-md-12 text-right">
-        <input type="button" id="btnAdd" class="btn btn-primary para" value="Add New" />
+      <div class="col-md-4">
+        <h3>Selected Record ids: => </h3>
+      </div>
+      <div class="col-md-8 selectedDiv">
       </div>
     </div>
     <div class="row pt-3">
@@ -40,12 +51,14 @@
         <table id="tblData" class="table table-bordered table-hover table-striped">
           <thead>
             <tr>
+              <th>
+                <input type="checkbox" class="largerCheckbox" id="chkAll" />
+              </th>
               <th>Name</th>
               <th>User Name</th>
               <th>Email</th>
               <th>Phone</th>
               <th>Website</th>
-              <th class="tdaction">Action</th>
             </tr>
           </thead>
           <tbody>
@@ -62,36 +75,46 @@
     </div>
   </div>
   <script>
-    var emptyRow = "<tr><td colspan='6' class='text-center'> No Records Available</td></tr>";
-    var emptyNewRow = "<tr class='trNewRow'>";
-    emptyNewRow = emptyNewRow + "    <td class='tdName'>";
-    emptyNewRow = emptyNewRow + "        <input type='text' class='form-control txtName' placeholder='Enter Name'/>";
-    emptyNewRow = emptyNewRow + "    </td>";
-    emptyNewRow = emptyNewRow + "    <td class='tdUserName'>";
-    emptyNewRow = emptyNewRow + "        <input type='text' class='form-control txtUserName' placeholder='Enter User Name'/>";
-    emptyNewRow = emptyNewRow + "    </td>";
-    emptyNewRow = emptyNewRow + "    <td class='tdEmail'>";
-    emptyNewRow = emptyNewRow + "        <input type='text' class='form-control txtEmail' placeholder='Enter Email'/>";
-    emptyNewRow = emptyNewRow + "    </td>";
-    emptyNewRow = emptyNewRow + "    <td class='tdPhone'>";
-    emptyNewRow = emptyNewRow + "        <input type='text' class='form-control txtPhone' placeholder='Enter Phone'/>";
-    emptyNewRow = emptyNewRow + "    </td>";
-    emptyNewRow = emptyNewRow + "    <td class='tdWebsite'>";
-    emptyNewRow = emptyNewRow + "        <input type='text' class='form-control txtWebsite' placeholder='Enter Website'/>";
-    emptyNewRow = emptyNewRow + "    </td>";
-    emptyNewRow = emptyNewRow + "    <td class='tdAction'>";
-    emptyNewRow = emptyNewRow + "        <button class='btn btn-sm btn-success btn-save'> Save</button>";
-    emptyNewRow = emptyNewRow + "        <button class='btn btn-sm btn-success btn-cancel'> Cancel</button>";
-    emptyNewRow = emptyNewRow + "    </td>";
-    emptyNewRow = emptyNewRow + "</tr>";
-
-    var rowButtons = "<button class='btn btn-success btn-sm btn-edit' > Edit </button>  <button class='btn btn-danger btn-sm' > Delete </button> ";
-    var rowUpdateButtons = "<button class='btn btn-success btn-sm btn-save' > Update </button>  <button class='btn btn-danger btn-sm btn-save' > Cancel </button> ";
 
     $(document).ready(function () {
       loadGridData();
-      debugger;
+      $('#tblData').on('change', '.tblChk', function () {
+        debugger;
+        if ($('.tblChk:checked').length == $('.tblChk').length) {
+          $('#chkAll').prop('checked', true);
+        } else {
+          $('#chkAll').prop('checked', false);
+        }
+        getCheckRecords();
+      });
+
+      $("#chkAll").change(function () {
+        debugger;
+        if ($(this).prop('checked')) {
+          $('.tblChk').not(this).prop('checked', true);
+        } else {
+          $('.tblChk').not(this).prop('checked', false);
+        }
+        getCheckRecords();
+      })
     });
+    function getCheckRecords() {
+      debugger;
+      $(".selectedDiv").html("");
+      $('.tblChk:checked').each(function () {
+        debugger;
+        if ($(this).prop('checked')) {
+          if ($(".selectedDiv").children().length == 0) {
+            const rec = "<strong>" + $(this).attr("data-id") + " </strong>";
+            $(".selectedDiv").append(rec);
+          } else {
+            const rec = ", <strong>" + $(this).attr("data-id") + " </strong>";
+            $(".selectedDiv").append(rec);
+          }
+        }
+        console.log(this.value);
+      });
+    }
 
     function loadGridData() {
       $.ajax({
@@ -101,25 +124,22 @@
         processData: false,
         data: "",
         beforeSend: function () {
-          debugger;
           $("#trLoader").show();
         },
         success: function (results) {
-          debugger;
           $("#trLoader").remove();
-          if ($("#tblData tbody").children().children().length == 1) {
-            $("#tblData tbody").html("");
-          }
+          let index = 0;
           results.forEach(element => {
             let dynamicTR = "<tr>";
+            dynamicTR = dynamicTR + "<td> <input type='checkbox' data-id=" + element.id + " class='largerCheckbox tblChk chk" + index + "' /></td>";
             dynamicTR = dynamicTR + "<td>" + element.name + "</td>";
             dynamicTR = dynamicTR + "<td>" + element.username + "</td>";
             dynamicTR = dynamicTR + "<td>" + element.email + "</td>";
             dynamicTR = dynamicTR + "<td>" + element.phone + "</td>";
             dynamicTR = dynamicTR + "<td>" + element.website + "</td>";
-            dynamicTR = dynamicTR + "<td class='tdaction'>" + rowButtons + "</td>";
             dynamicTR = dynamicTR + " </tr>";
             $("#tblData tbody").append(dynamicTR);
+            index++;
           });
         }
       });
