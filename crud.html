@@ -1,208 +1,249 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html lang="en"> 
 <head>
-    <title>Bootstrap Example</title>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <style>
-        @media (min-width: 576px) {
-            .jumbotron {
-                padding: 1rem 2rem;
-            }
-        }
+  <title>jQuery Crud</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <style>
+    @media (min-width: 576px) {
+      .jumbotron {
+        padding: 1rem 2rem;
+      }
+    }
+    .errdiv {
+      color: red;
+      font-weight: bold;
+    }
 
-        .tdaction {
-            width: 15%;
-        }
+    label {
+      margin-bottom: 0;
+    }
 
-        .tdSr {
-            width: 7%;
-        }
-    </style>
-</head>
+    .tdaction {
+      width: 15%;
+    }
 
+    .tdSr {
+      width: 7%;
+    }
+
+    .jumbotron {
+      margin-bottom: 0.5rem;
+    }
+
+    strong {
+      font-size: 24px !important;
+    }
+
+    input.largerCheckbox {
+      width: 20px;
+      height: 20px;
+    }
+  </style>
+</head> 
 <body>
-    <div class="container">
-        <div class="jumbotron text-center bg-success text-white">
-            <h2>Crud Operation Jquery-Ajax with jsonplaceholder Fake API</h2>
-            <p>Fetching GET,POST,PUT & DELETE API</p> 
-        </div>
-        <div class="row">
-            <div class="col-md-12 text-right">
-                <input type="button" id="btnAdd" class="btn btn-primary para" value="Add New" />
-            </div>
-        </div>
-        <div class="row pt-3">
-            <div class="col-md-12 col-sm-12 col-12 p-2 ">
-                <table id="tblData" class="table table-bordered table-hover table-striped">
-                    <thead>
-                        <tr>
-                            <th>Name</th>
-                            <th>User Name</th>
-                            <th>Email</th>
-                            <th>Phone</th>
-                            <th>Website</th>
-                            <th class="tdaction">Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td colspan="6" id="trLoader">
-                                <div class="text-center">
-                                    Loading
-                                </div>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
+  <div class="container">
+    <div class="jumbotron text-center bg-success text-white">
+      <h2>jQuery Crud With Local Storage</h2>
+      <h4> Insert, Update & Delete Operation</h4>
     </div>
-    <script>
-        var emptyRow = "<tr><td colspan='6' class='text-center'> No Records Available</td></tr>";
-        var emptyNewRow = "<tr class='trNewRow'>";
-        emptyNewRow = emptyNewRow + "    <td class='tdName'>";
-        emptyNewRow = emptyNewRow + "        <input type='text' class='form-control txtName' placeholder='Enter Name'/>";
-        emptyNewRow = emptyNewRow + "    </td>";
-        emptyNewRow = emptyNewRow + "    <td class='tdUserName'>";
-        emptyNewRow = emptyNewRow + "        <input type='text' class='form-control txtUserName' placeholder='Enter User Name'/>";
-        emptyNewRow = emptyNewRow + "    </td>";
-        emptyNewRow = emptyNewRow + "    <td class='tdEmail'>";
-        emptyNewRow = emptyNewRow + "        <input type='text' class='form-control txtEmail' placeholder='Enter Email'/>";
-        emptyNewRow = emptyNewRow + "    </td>";
-        emptyNewRow = emptyNewRow + "    <td class='tdPhone'>";
-        emptyNewRow = emptyNewRow + "        <input type='text' class='form-control txtPhone' placeholder='Enter Phone'/>";
-        emptyNewRow = emptyNewRow + "    </td>";
-        emptyNewRow = emptyNewRow + "    <td class='tdWebsite'>";
-        emptyNewRow = emptyNewRow + "        <input type='text' class='form-control txtWebsite' placeholder='Enter Website'/>";
-        emptyNewRow = emptyNewRow + "    </td>";
-        emptyNewRow = emptyNewRow + "    <td class='tdAction'>";
-        emptyNewRow = emptyNewRow + "        <button class='btn btn-sm btn-success btn-save'> Save</button>";
-        emptyNewRow = emptyNewRow + "        <button class='btn btn-sm btn-success btn-cancel'> Cancel</button>";
-        emptyNewRow = emptyNewRow + "    </td>";
-        emptyNewRow = emptyNewRow + "</tr>";
+    <div class="form-row">
+      <div class="col-md-3">
+        <label>Name <span class="errdiv"> *</span></label>
+        <input id="txtName" type="text" class="form-control txt txtName" placeholder="Enter Name" required>
+        <input id="txtId" type="hidden" class="form-control txt">
+      </div>
+      <div class="col-md-3 col-sm-6 col-6">
+        <label>Contact No <span class="errdiv"> *</span></label>
+        <input id="txtContact" data-type="number" type="text" minlength="10" maxlength="10"
+          class="form-control txt txtContact" placeholder="Contact No" required>
+      </div>
+      <div class="col-md-3 col-sm-6 col-6">
+        <label>Alt Contact No</label>
+        <input id="txtAltNo" type="text" class="form-control txt txtAltNo" minlength="10" maxlength="10"
+          placeholder="Alt Contact No">
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="col-md-6 col-sm-7">
+        <label>Address <span class="errdiv"> *</span></label>
+        <textarea id="txtAddress" class="form-control txt txtAddress" rows="3" minlength="15"
+          placeholder="Enter Address" required></textarea>
+      </div>
+    </div>
+    <div class="row pt-2">
+      <div class="col-md-2">
+        <button type="button" class="btn btn-success" id="btnSave">Save</button>
+      </div>
+      <div class="col-md-2">
+        <button type="button" class="btn btn-secondary" id="btnClear">Clear</button>
+      </div>
+    </div>
+    <div class="row pt-3">
+      <div class="col-md-12 col-sm-12 col-12 p-2 ">
+        <table id="tblData" class="table table-bordered table-hover table-striped">
+          <thead>
+            <tr>
+              <th>Sr No</th>
+              <th> Name</th>
+              <th>Phone</th>
+              <th>Alt Phone</th>
+              <th>Address</th>
+              <th class="text-center">Action</th>
+            </tr>
+          </thead>
+          <tbody> 
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <script>
+    var emptyRow = "<tr><td colspan='6' class='text-center'> No Records Available</td></tr>";
+    $(document).ready(function () {
+      loadDataFromLocal();
+      $('#tblData').on('click', '.btn-edit', function () {
+        debugger;
+        const name = $(this).parent().parent().find(".txtName").html();
+        const contact = $(this).parent().parent().find(".txtContact").html();
+        const altContact = $(this).parent().parent().find(".txtAltNo").html();
+        const address = $(this).parent().parent().find(".txtAddress").html();
+        const id = $(this).parent().parent().find(".txtName").attr("data-id");
+        $("#txtName").val(name);
+        $("#txtContact").val(contact);
+        $("#txtAltNo").val(altContact);
+        $("#txtAddress").val(address);
+        $("#txtId").val(id);
+        $("#btnSave").text("Update");
+      });
 
-        var rowButtons = "<button class='btn btn-success btn-sm btn-edit' > Edit </button>  <button class='btn btn-danger btn-sm' > Delete </button> ";
-        var rowUpdateButtons = "<button class='btn btn-success btn-sm btn-save' > Update </button>  <button class='btn btn-danger btn-sm btn-save' > Cancel </button> ";
+      $('#tblData').on('click', '.btn-delete', function () {
+        debugger;
+        const id = $(this).parent().parent().find(".txtName").attr("data-id");
+        deleteDataFromLocal(id);
+      });
 
-        $(document).ready(function () {
-            loadGridData();
-            debugger;
-            $("#tblData tbody").append(emptyRow); // adding empty row on page load 
+      $("#btnSave").click(function () {
+        debugger;
+        if ($("#txtId").val() == '') {
+          addDataToLocal();
+        } else {
+          updateDataFromLocal();
+        }
+      });
 
-            $("#btnAdd").click(function () {
-                debugger;
-                if ($("#tblData tbody").children().children().length == 1) {
-                    $("#tblData tbody").html("");
-                }
-                debugger;
-                $("#tblData tbody").prepend(emptyNewRow); // appending dynamic string to table tbody
-            });
+      $("#btnClear").click(function () {
+        debugger;
+        clearForm();
+      });
+    });
 
-            $('#tblData').on('click', '.btn-save', function () {
-                debugger;
-                const name = $(this).parent().parent().find(".txtName").val(); 
-                const UserName = $(this).parent().parent().find(".txtUserName").val(); 
-                const Email = $(this).parent().parent().find(".txtEmail").val();  
+    function clearForm() {
+      debugger;
+      $("#txtName").val("");
+      $("#txtContact").val("");
+      $("#txtAltNo").val("");
+      $("#txtAddress").val("");
+      $("#btnSave").text("Add");
+    }
 
-                const Phone = $(this).parent().parent().find(".txtPhone").val();  
-                const Website = $(this).parent().parent().find(".txtWebsite").val();   
+    function addEmptyRow() {
+      debugger;
+      if ($("#tblData tbody").children().children().length == 0) {
+        $("#tblData tbody").append(emptyRow);
+      }
+    }
 
-                const userObj = { 
-                    "name": name,
-                    "username": UserName,
-                    "email": Email, 
-                    "phone": Phone,
-                    "website": Website
-                };
-                $.ajax({
-                    type: "PUT",
-                    url: "https://jsonplaceholder.typicode.com/users",
-                    contentType: false,
-                    processData: false,
-                    data: JSON.stringify(userObj),
-                    beforeSend: function () {
-                        debugger;
-                        $("#trLoader").show();
-                    },
-                    success: function (results) {
-                        debugger;
-                       
-                    }
-                });
-            });
-
-
-            $('#tblData').on('click', '.btn-danger', function () { // registering function for delete button  
-                $.ajax({
-                    type: "DELETE",
-                    url: "https://jsonplaceholder.typicode.com/users/1",
-                    contentType: false,
-                    processData: false,
-                    data: "",
-                    beforeSend: function () {
-                        debugger;
-                        $("#trLoader").show();
-                    },
-                    success: function (results) {
-                        debugger;
-                         
-                    }
-                });
-            });
-
-
-            $('#tblData').on('click', '.btn-cancel', function () {
-                $(this).parent().parent().remove();
-            });
-            $('#tblData').on('click', '.btn-edit', function () {
-                const name = $(this).parent().parent().find(".tdName").html();
-                $(this).parent().parent().find(".tdName").html("<input type='text' value='" + name + "' class='form-control txtName' placeholder='Enter Name'/>");
-                const city = $(this).parent().parent().find(".tdCity").html();
-                $(this).parent().parent().find(".tdCity").html("<input type='text' value='" + city + "' class='form-control txtCity' placeholder='Enter City'/>");
-                const mobile = $(this).parent().parent().find(".tdMobile").html();
-                $(this).parent().parent().find(".tdMobile").html("<input type='text' value='" + mobile + "' class='form-control txtMobile' placeholder='Enter Mobile'/>");
-                $(this).parent().parent().find(".tdAction").html(rowUpdateButtons);
-            });
-           
+    function loadDataFromLocal() {
+      debugger;
+      let localData = localStorage.getItem('localData');
+      if (localData) {
+        $("#tblData tbody").html("");
+        let localArray = JSON.parse(localData);
+        let index = 1;
+        localArray.forEach(element => {
+          let dynamicTR = "<tr>";
+          dynamicTR = dynamicTR + "<td> " + index + "</td>";
+          dynamicTR = dynamicTR + "<td class='txtName'  data-id=" + element.id + ">" + element.name + "</td>";
+          dynamicTR = dynamicTR + "<td class='txtContact'>" + element.contact + "</td>";
+          dynamicTR = dynamicTR + "<td class='txtAltNo'>" + element.altContact + "</td>";
+          dynamicTR = dynamicTR + "<td class='txtAddress'>" + element.address + "</td>";
+          dynamicTR = dynamicTR + "    <td class='tdAction text-center'>";
+          dynamicTR = dynamicTR + "        <button class='btn btn-sm btn-success btn-edit'> Edit</button>";
+          dynamicTR = dynamicTR + "        <button class='btn btn-sm btn-danger btn-delete'> Delete</button>";
+          dynamicTR = dynamicTR + "    </td>";
+          dynamicTR = dynamicTR + " </tr>";
+          $("#tblData tbody").append(dynamicTR);
+          index++;
         });
+      }
+      addEmptyRow();
+    }
 
-        function loadGridData() {
-                $.ajax({
-                    type: "GET",
-                    url: "https://jsonplaceholder.typicode.com/users",
-                    contentType: false,
-                    processData: false,
-                    data: "",
-                    beforeSend: function () {
-                        debugger;
-                        $("#trLoader").show();
-                    },
-                    success: function (results) {
-                        debugger;
-                        $("#trLoader").remove();  
-                        if ($("#tblData tbody").children().children().length == 1) {
-                    $("#tblData tbody").html("");
-                }
-                        results.forEach(element => {
-                            let dynamicTR ="<tr>";
-                                dynamicTR=dynamicTR+"<td>"+element.name+"</td>";
-                                dynamicTR=dynamicTR+"<td>"+element.username+"</td>";
-                                dynamicTR=dynamicTR+"<td>"+element.email+"</td>";
-                                dynamicTR=dynamicTR+"<td>"+element.phone+"</td>";
-                                dynamicTR=dynamicTR+"<td>"+element.website+"</td>";
-                                dynamicTR=dynamicTR+"<td class='tdaction'>"+rowButtons+"</td>";
-                                dynamicTR=dynamicTR+" </tr>";
-                                $("#tblData tbody").append(dynamicTR);
-                        });
-                    }
-                });
-            }
-        
-    </script>
+    function addDataToLocal() {
+      debugger;
+      let localData = localStorage.getItem('localData');
+      if (localData) {
+        let localArray = JSON.parse(localData);
+        const obj = {
+          id: localArray.length + 1,
+          name: $("#txtName").val(),
+          contact: $("#txtContact").val(),
+          altContact: $("#txtAltNo").val(),
+          address: $("#txtAddress").val()
+        };
+        localArray.push(obj);
+        localStorage.setItem('localData', JSON.stringify(localArray));
+        loadDataFromLocal();
+      } else {
+        const arryObj = [];
+        const obj = {
+          id: 1,
+          name: $("#txtName").val(),
+          contact: $("#txtContact").val(),
+          altContact: $("#txtAltNo").val(),
+          address: $("#txtAddress").val()
+        };
+        arryObj.push(obj);
+        localStorage.setItem('localData', JSON.stringify(arryObj));
+        loadDataFromLocal();
+      }
+      clearForm();
+    }
+
+    function updateDataFromLocal() {
+      debugger;
+      let localData = localStorage.getItem('localData');
+      let localArray = JSON.parse(localData);
+      const oldRecord = localArray.find(m => m.id == $("#txtId").val());
+      oldRecord.name = $("#txtName").val();
+      oldRecord.contact = $("#txtContact").val();
+      oldRecord.altContact = $("#txtAltNo").val();
+      oldRecord.address = $("#txtAddress").val();
+      localStorage.setItem('localData', JSON.stringify(localArray));
+      loadDataFromLocal();
+      clearForm();
+    }
+
+    function deleteDataFromLocal(id) {
+      debugger;
+      let localData = localStorage.getItem('localData');
+      let localArray = JSON.parse(localData);
+      let i = 0;
+      while (i < localArray.length) {
+        if (localArray[i].id === Number(id)) {
+          localArray.splice(i, 1);
+        } else {
+          ++i;
+        }
+      }
+      localStorage.setItem('localData', JSON.stringify(localArray));
+      loadDataFromLocal();
+    }
+
+  </script>
 </body>
 
 </html>
